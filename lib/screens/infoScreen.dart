@@ -1,37 +1,38 @@
+import 'package:codeforces_app/screens/pie_chart_widget.dart';
 import 'package:codeforces_app/utilities/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:codeforces_app/widgets/graphsCard.dart';
 
-class InfoScreen extends StatefulWidget {
-  final data;
+class InfoScreen extends StatelessWidget {
+  // final data;
 
-  InfoScreen({this.data});
+  InfoScreen(
+      {this.organization,
+      this.rank,
+      this.maxRating,
+      this.rating,
+      this.titlePhoto,
+      this.country,
+      this.firstName,
+      this.lastName});
 
-  @override
-  _InfoScreenState createState() => _InfoScreenState();
-}
+  final String firstName, lastName, country, rank, organization, titlePhoto;
+  final int rating, maxRating;
 
-class _InfoScreenState extends State<InfoScreen> {
-  String firstName, lastName, country, rank, organization, titlePhoto;
-  int rating, maxRating;
-
-  void updateUI(dynamic coderData) {
-    setState(() {
-      firstName = coderData['result'][0]['firstName'] ?? '';
-      lastName = coderData['result'][0]['lastName'] ?? '';
-      country = coderData['result'][0]['country'] ?? '';
-      rating = coderData['result'][0]['rating'] ?? 0;
-      maxRating = coderData['result'][0]['maxRating'] ?? 0;
-      rank = coderData['result'][0]['rank'] ?? 'not Ranked';
-      organization = coderData['result'][0]['organization'] ?? '';
-      titlePhoto = coderData['result'][0]['titlePhoto'];
-    });
-  }
+  // void updateUI(dynamic coderData) {
+  //   firstName = coderData['result'][0]['firstName'] ?? '';
+  //   lastName = coderData['result'][0]['lastName'] ?? '';
+  //   country = coderData['result'][0]['country'] ?? '';
+  //   rating = coderData['result'][0]['rating'] ?? 0;
+  //   maxRating = coderData['result'][0]['maxRating'] ?? 0;
+  //   rank = coderData['result'][0]['rank'] ?? 'not Ranked';
+  //   organization = coderData['result'][0]['organization'] ?? '';
+  //   titlePhoto = coderData['result'][0]['titlePhoto'];
+  // }
 
   @override
   Widget build(BuildContext context) {
-    updateUI(widget.data);
     return SafeArea(
       child: Scaffold(
         body: Column(
@@ -137,7 +138,13 @@ class _InfoScreenState extends State<InfoScreen> {
               child: Row(
                 children: [
                   GraphsCard(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => PieGraphScreen()),
+                      );
+                    },
                     icon: Icons.pie_chart_rounded,
                     color: Colors.deepOrangeAccent,
                     title: 'Pie Chart',
