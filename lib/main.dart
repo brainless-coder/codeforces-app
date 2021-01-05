@@ -8,8 +8,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: "CodeForces App",
+      // theme: ThemeData.from(
+      //   colorScheme: ColorScheme.dark().copyWith(
+      //       // background: Color(),
+      //       ),
+      // ),
       theme: ThemeData.dark().copyWith(
-        backgroundColor: Color(0XFF242A42),
+        primaryColor: Color(0xFF0A0E21),
+        scaffoldBackgroundColor: Color(0xFF0A0E21),
       ),
       home: SearchScreen(),
     );
