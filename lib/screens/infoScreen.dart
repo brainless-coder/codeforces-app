@@ -1,38 +1,62 @@
 import 'package:codeforces_app/screens/pie_chart_widget.dart';
+import 'package:codeforces_app/services/networking.dart';
 import 'package:codeforces_app/utilities/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:codeforces_app/widgets/graphsCard.dart';
 
-class InfoScreen extends StatelessWidget {
-  // final data;
+class InfoScreen extends StatefulWidget {
+  final data;
 
-  InfoScreen(
-      {this.organization,
-      this.rank,
-      this.maxRating,
-      this.rating,
-      this.titlePhoto,
-      this.country,
-      this.firstName,
-      this.lastName});
+  InfoScreen({this.data});
 
-  final String firstName, lastName, country, rank, organization, titlePhoto;
-  final int rating, maxRating;
+  @override
+  _InfoScreenState createState() => _InfoScreenState();
+}
 
-  // void updateUI(dynamic coderData) {
-  //   firstName = coderData['result'][0]['firstName'] ?? '';
-  //   lastName = coderData['result'][0]['lastName'] ?? '';
-  //   country = coderData['result'][0]['country'] ?? '';
-  //   rating = coderData['result'][0]['rating'] ?? 0;
-  //   maxRating = coderData['result'][0]['maxRating'] ?? 0;
-  //   rank = coderData['result'][0]['rank'] ?? 'not Ranked';
-  //   organization = coderData['result'][0]['organization'] ?? '';
-  //   titlePhoto = coderData['result'][0]['titlePhoto'];
-  // }
+String handle;
+NetworkHelper networkHelper = NetworkHelper(handle);
+
+class _InfoScreenState extends State<InfoScreen> {
+  String firstName, lastName, country, rank, organization, titlePhoto;
+
+  int rating, maxRating;
+
+  void updateUI(dynamic coderData) {
+    setState(() {
+      firstName = coderData['result'][0]['firstName'] ?? '';
+      lastName = coderData['result'][0]['lastName'] ?? '';
+      country = coderData['result'][0]['country'] ?? '';
+      rating = coderData['result'][0]['rating'] ?? 0;
+      maxRating = coderData['result'][0]['maxRating'] ?? 0;
+      rank = coderData['result'][0]['rank'] ?? 'not Ranked';
+      organization = coderData['result'][0]['organization'] ?? '';
+      titlePhoto = coderData['result'][0]['titlePhoto'];
+      handle = coderData['result'][0]['handle'];
+    });
+  }
+
+  void pieChartTap() async {
+    var data = await networkHelper.getStatus();
+
+    var verdict = data['result'][15]['verdict'];
+    print(verdict);
+
+    if (data != null) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => PieGraphScreen(data: data),
+        ),
+      );
+    } else {
+      print('Some error occurred, please try again.');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    updateUI(widget.data);
     return SafeArea(
       child: Scaffold(
         body: Column(
@@ -138,13 +162,7 @@ class InfoScreen extends StatelessWidget {
               child: Row(
                 children: [
                   GraphsCard(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => PieGraphScreen()),
-                      );
-                    },
+                    onTap: pieChartTap,
                     icon: Icons.pie_chart_rounded,
                     color: Colors.deepOrangeAccent,
                     title: 'Pie Chart',

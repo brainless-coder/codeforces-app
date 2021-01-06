@@ -15,21 +15,14 @@ class _SearchScreenState extends State<SearchScreen> {
 
   void getInfo() async {
     NetworkHelper networkHelper = NetworkHelper(handle);
-    var data = await networkHelper.getData();
+    var data = await networkHelper.getInfo();
 
     if (data != null) {
       Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => InfoScreen(
-            firstName: data['result'][0]['firstName'] ?? '',
-            lastName: data['result'][0]['lastName'] ?? '',
-            country: data['result'][0]['country'] ?? '',
-            rating: data['result'][0]['rating'] ?? 0,
-            maxRating: data['result'][0]['maxRating'] ?? 0,
-            rank: data['result'][0]['rank'] ?? 'not Ranked',
-            organization: data['result'][0]['organization'] ?? '',
-            titlePhoto: data['result'][0]['titlePhoto'],
+            data: data,
           ),
         ),
       );
